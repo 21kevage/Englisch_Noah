@@ -1,68 +1,67 @@
-# Englisch_Noah
+# Englisch_Noah – Prototyp 0.2
 
-Lokaler Vokabeltrainer für Noah. **Prototyp 0.1 – noch kein auf dem iPhone abgenommener Alltagsbetrieb.**
+Web-App für Noahs Englischtraining. GitHub Pages übernimmt die statische Bereitstellung; keine eigene Serververwaltung, kein Konto und keine kostenpflichtigen APIs.
 
-## Ausprobieren
+## Einmalig GitHub Pages einschalten
 
-1. Repository als ZIP herunterladen und entpacken (Code → Download ZIP).
-2. Die enthaltene `index.html` öffnen. Alle Programmteile und Startdaten stecken in dieser Datei; keine Installation von Bibliotheken nötig.
-3. Im Elternbereich eine PIN mit 4–8 Ziffern festlegen.
-4. Einträge einzeln prüfen, gegebenenfalls korrigieren und freigeben.
-5. Eine Lernrunde starten. Ohne Freigabe werden keine Buchinhalte abgefragt.
+Unter Settings → Pages:
+- Source: **Deploy from a branch**
+- Branch: **main**
+- Folder: **/(root)**
+- Save
 
-Die GitHub-Dateiansicht führt HTML nicht aus. Es wurde kein Hosting und keine GitHub-Pages-Veröffentlichung eingerichtet.
-**Ob iOS die lokale Datei ausführbar öffnet und Daten dauerhaft behält, ist offen.** Zuerst auf Noahs iPhone testen; wenn dort nur eine Vorschau erscheint, ist dieser Verteilungsweg nicht bestätigt. Ein Desktop-Test ersetzt den iPhone-Test nicht.
+Einstellungsseite: https://github.com/21kevage/Englisch_Noah/settings/pages
 
-## Enthalten
+Die erwartete Adresse nach erfolgreicher Bereitstellung ist https://21kevage.github.io/Englisch_Noah/ .
+**Pages war bei Vorbereitung dieser Version noch nicht aktiviert. Diese URL ist daher noch nicht als erreichbar bestätigt.**
+Der verwendete GitHub-Zugang kann Dateien bearbeiten, bietet aber keine Pages-Aktivierungsfunktion.
 
-- 80 eindeutige Einträge aus dem Intro-Ausschnitt und S. 171–173, alle zunächst ungeprüft.
-- Englische Buchsätze, ergänzte deutsche Satzübersetzungen und vorhandene Texthinweise.
-- Wiederholte History-Wörter mit zusätzlicher Zuordnung statt doppeltem Lernstand.
-- Satz- und Vokabeltraining mit groß-/kleinschreibungssensitivem Textvergleich.
-- Wortweiser Vergleich mit Markierung fehlender, zusätzlicher und ersetzter Wörter.
-- Mündliches Üben und Buchstabieren mit Selbstbewertung; Systemvorlesen soweit verfügbar.
-- Getrennte Lernstände für Wort, Satz und Buchstabieren.
-- Maximal acht Startaufgaben, fällige zuerst, ein zusätzlicher Versuch je fehlerhaftem Eintrag.
-- Elternprüfung und neue Änderungsversion: bisherige Freigabe bleibt bis zur erneuten Freigabe aktiv.
-- Sicherungsexport und validierter Import.
+## Auf dem iPhone
 
-## Bewusste Grenzen von 0.1
+1. Nach erfolgreicher Bereitstellung die Webadresse in Safari öffnen.
+2. Teilen → Zum Home-Bildschirm hinzufügen.
+3. Die App über dieses Symbol öffnen; abwarten, bis „App für Offline-Nutzung gespeichert“ erscheint.
+4. Im Elternbereich eine PIN festlegen.
+5. Die separat bereitgestellte Datei `Noah-Vokabeln-Unit1.json` unter **Vokabeldatei importieren** auswählen.
+6. Einträge prüfen und freigeben.
+7. Schließen, wieder öffnen und im Flugmodus erneut testen.
 
-- Keine Mikrofonerkennung und keine Aussprachebenotung. Diktierter Text im Texteingabefeld wird als Text bewertet, einschließlich Großschreibung.
-- Keine Spielelemente, Konten, Synchronisierung oder bezahlten APIs.
-- Lautschrift und Illustrationen sind noch nicht übertragen. Satzübersetzungen wurden ergänzt und benötigen Elternprüfung.
-- Die Buchseite 170 ist nur durch den vorhandenen Intro-Ausschnitt abgedeckt.
-- Abschnittszuordnung und Satz-/Zeilenzuordnung beim Prüfen mit den Fotos abgleichen.
-- PIN ist eine lokale Bedienungssperre, kein sicherer Zugangsschutz; sie liegt auch in der Sicherungsdatei.
-- Rückgabe mit Elternkommentar und PIN-Wiederherstellungsdialog sind noch nicht umgesetzt.
-- Textvergleich normalisiert Leerraum, gerade/typografische Apostrophe und abschließende . ! ?. Groß-/Kleinschreibung, interne Satzzeichen und Kurzformen bleiben strikt.
-- „Sicher“ ist eine vorläufige Regel: drei erfolgreiche Tage; ein Fehler setzt diese Reihe zurück. Direkte Wiederholung nach Lösung zählt nicht als weiterer erfolgreicher Lerntag.
+**Die lokale HTML-Datei funktioniert in der iPhone-Dateivorschau nicht als App.** Dieses Problem wurde beim Test beobachtet. Der HTTPS-/PWA-Weg ist auf Noahs iPhone noch zu testen.
 
-## Speicherung und Sicherung
+## Daten und Funktionen
 
-Der Ein-Datei-Prototyp verwendet zunächst **localStorage**, noch nicht IndexedDB. Er zeigt Speicherfehler an. Dateibasierter Browserspeicher ist browserabhängig; Verschieben, Umbenennen, Browserdatenlöschen oder ein Gerätewechsel kann den Zugriff auf den Lernstand verlieren lassen.
-Regelmäßig im Elternbereich eine JSON-Sicherung exportieren und über die Dateiverwaltung aufbewahren. Import ersetzt nach Bestätigung den aktuellen Stand. Keine Sprachaufnahmen werden gespeichert.
+Die veröffentlichte App enthält keine Buchvokabeln. Das separate Importpaket enthält 80 ungeprüfte Einträge aus dem Intro-Ausschnitt und S. 171–173. Lautschrift fehlt noch; deutsche Satzübersetzungen benötigen Prüfung.
+Import ergänzt neue IDs, überspringt vorhandene IDs und verändert weder bestehende Freigaben noch Lernstände. Neue Inhalte starten ungeprüft.
+**Wichtig:** Der öffentliche Git-Verlauf enthält weiterhin den früheren Prototyp mit Buchdaten. Die aktuelle Version entfernt diese aus der ausgelieferten App, nicht rückwirkend aus der Historie.
 
-## Prüfungen
+- Groß-/kleinschreibungssensitive Textprüfung mit Wortvergleich.
+- Mündliche Übungen und Buchstabieren mit Selbstbewertung.
+- Vorlesen per Systemstimme; keine Mikrofonerkennung oder Aussprachebenotung.
+- Getrennte Lernstände und Wiederholungen.
+- Elternfreigabe, Änderungen bleiben bis zur Prüfung getrennt von der gültigen Fassung.
+- Sicherungsexport und Wiederherstellung.
+
+## Speicherung und Offline-Nutzung
+
+Lerndaten und Vokabeln bleiben im lokalen Browserspeicher (localStorage). Keine Übertragung an einen Datenbankserver. Sie werden nicht automatisch zwischen Android, Safari und installierter App übertragen.
+Sicherung regelmäßig exportieren. Löschen von Websitedaten oder ein Gerätewechsel kann Daten entfernen.
+Die App-Dateien werden per Service Worker zwischengespeichert; erster Besuch benötigt Internet. Offline funktioniert nur solange der Cache auf dem Gerät erhalten bleibt.
+Systemvorlesen kann von heruntergeladenen Stimmen und Gerät abhängen.
+Neue Programmversionen können nach Schließen aller App-Fenster und erneutem Online-Öffnen aktiv werden. Die Datenbank wird dabei nicht zurückgesetzt.
+
+## Grenzen und Prüfungen
+
+Die PIN ist nur eine lokale Bedienungssperre und steht auch in Sicherungsdateien.
+Rückgabe mit Elternkommentar und PIN-Wiederherstellung sind noch offen.
+Textvergleich normalisiert Leerraum, Apostrophvarianten und abschließende . ! ?. Großschreibung, interne Satzzeichen und Kurzformen bleiben strikt.
+„Sicher“ benötigt vorläufig drei erfolgreiche Tage; unmittelbare Wiederholung nach Lösung zählt nicht als zusätzlicher erfolgreicher Tag.
 
 ```sh
 node tests/core.cjs
 ```
 
-Bestanden: Eintragsanzahl, ungeprüfter Startzustand, Großschreibung, Grammatikabweichungen, Apostrophe, Wortvergleich, Wiederholung, JSON-Sicherungsrunde, Ablehnung fehlerhafter Sicherungen, HTML-Escaping und Speicheraufruf.
+Kernprüfungen bestanden: leerer App-Start, Importvalidierung, Großschreibung, Wortunterschiede, Wiederholung, JSON-Rundlauf und HTML-Escaping. Service-Worker-Syntax geprüft.
+Kein vollständiger Browser-/iPhone-Test durchgeführt; der Browserdownload in der Entwicklungsumgebung scheiterte.
+Noch am Gerät prüfen: Installation, Import, Freigabe, Speichern nach Neustart, Export/Import, Flugmodus, Vorlesen.
 
-Vollständiger Browser-/UI-Test wurde hier nicht ausgeführt: der benötigte Browserdownload schlug fehl. Keine iPhone-Kompatibilität behauptet.
-
-### Checkliste für Noahs iPhone
-
-- [ ] Lokale HTML startet mit bedienbaren Buttons.
-- [ ] PIN setzen, ersten Eintrag prüfen und freigeben.
-- [ ] Richtige und falsche Antwort prüfen; Wortmarkierung kontrollieren.
-- [ ] Datei schließen und neu öffnen: Eintrag und Lernstand vorhanden?
-- [ ] Sicherung exportieren und wieder importieren.
-- [ ] Vorlesen deutscher Aufgaben und englischer Lösungen testen.
-- [ ] Gerät offline schalten und Kernfunktionen prüfen.
-
-## Projektverlauf
-
-[Konzept und Entscheidungen](docs/KONZEPT.md). Entwicklung und Dokumentation liegen im Repository; persönliche Lerndaten bleiben auf dem Gerät.
+[Konzept und Entscheidungsverlauf](docs/KONZEPT.md)
