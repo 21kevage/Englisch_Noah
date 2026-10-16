@@ -1,7 +1,8 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync(__dirname+'/../index.html','utf8');const script=html.match(/<script>([\s\S]*)<\/script>/)[1];const elements=new Map(),storage=new Map();const element=s=>{if(!elements.has(s))elements.set(s,{textContent:'',innerHTML:'',hidden:true,disabled:false,querySelectorAll:()=>[]});return elements.get(s)};
 const ctx=vm.createContext({console,Date,Math,Set,JSON,Array,Number,String,Error,localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},document:{querySelector:element},alert:()=>{},setTimeout});vm.runInContext(script,ctx);const run=s=>vm.runInContext(s,ctx);
-assert.equal(run('db.entries.length'),80);assert.equal(run('db.entries.filter(e=>e.approved).length'),0);
+assert.equal(run('db.entries.length'),0);
+run("db.entries=vocabularyPack({type:'noah-vocabulary',version:1,entries:[{id:'book-1',en:'test',de:'Test',unit:'Test',section:'Test',page:'',sentence:'A test.',translation:'Ein Test.',note:'',also:''}]})");assert.equal(run('db.entries.filter(e=>e.approved).length'),0);
 assert.equal(run("norm('The romans built')===norm('The Romans built')"),false);
 assert.equal(run("norm('It take a lot')===norm('It takes a lot')"),false);
 assert.equal(run('norm("Hadrian’s Wall.")===norm("Hadrian\'s Wall")'),true);
@@ -9,7 +10,7 @@ assert.match(run("difference('The romans had a empire in 122.','The Romans had a
 assert.match(run("difference('The romans had a empire in 122.','The Romans had an empire in 122.')"),/a → an/);
 run("db.entries[0].approved=db.entries[0].pending;db.entries[0].pending=null;session={mode:'sentence',queue:['book-1'],index:0,done:false,results:[],retried:new Set()};record(false,'Textvergleich')");assert.equal(run('session.queue.length'),2);assert.equal(run('db.entries[0].progress.sentence.lastOK'),false);
 run("session.index=1;session.done=false;record(true,'Textvergleich')");assert.equal(run('db.entries[0].progress.sentence.days.length'),0);
-assert.equal(run('validate(JSON.parse(JSON.stringify(db))).entries.length'),80);
+assert.equal(run('validate(JSON.parse(JSON.stringify(db))).entries.length'),1);
 assert.throws(()=>run("validate({version:1,pin:'',entries:[{}]})"));assert.throws(()=>run("validate({version:1,pin:'',entries:[db.entries[0],db.entries[0]]})"));
 assert.equal(run("esc('<img onerror=x>')"),'&lt;img onerror=x&gt;');assert.equal(run("JSON.parse(localStorage.getItem(KEY)).entries[0].progress.sentence.attempts"),2);
 console.log('PASS: seed count, unapproved defaults, capitalization, grammar mismatch, apostrophe normalization, word differences, retry progress, backup roundtrip, malformed backup rejection, HTML escaping, storage write.');
