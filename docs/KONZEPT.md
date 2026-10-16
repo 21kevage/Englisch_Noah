@@ -1,6 +1,17 @@
 # Konzept: Englisch lernen für Noah
 
-Stand: 16.10.2026. Status: Konzeptphase, noch keine App implementiert.
+Stand: 16.10.2026. Status: Prototyp 0.1 implementiert; iPhone-Machbarkeit noch offen.
+
+## Aktualisierung nach Proberunde und Prototypauftrag
+
+Diese Entscheidungen ergänzen bzw. ersetzen frühere Planungsstände:
+- Getippte Antworten werden ausdrücklich groß-/kleinschreibungssensitiv geprüft. Bei einer späteren Mikrofonerkennung darf deren Großschreibung nicht als mündlicher Lernfehler zählen.
+- Kein selbst betriebenes Hosting gewünscht; zunächst lokale Einzel-HTML als Machbarkeitstest. PWA/native App nicht final entschieden.
+- Version 0.1 speichert vorläufig in localStorage und bietet JSON-Export/-Import. IndexedDB war ein Architekturvorschlag, nicht bereits umgesetzt.
+- 80 Einträge aus den bereitgestellten Bildern als ungeprüfte Inhalte aufgenommen. Lautschrift fehlt im ersten Prototyp. Keine erfundenen Buchsätze.
+- Mikrofonerkennung, Eltern-Rückgabekommentar und PIN-Wiederherstellung sind noch nicht umgesetzt.
+- Aktueller Funktionsumfang, Teststand und Gerätegrenzen stehen in der README.
+
 
 ## Ziel und Rahmen
 
