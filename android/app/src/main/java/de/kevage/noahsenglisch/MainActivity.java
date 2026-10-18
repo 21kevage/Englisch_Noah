@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Locale;
 
 /** A deliberately small, offline wrapper around the bundled learning app. */
 public class MainActivity extends Activity {
@@ -24,6 +27,10 @@ public class MainActivity extends Activity {
     private WebView webView;
     private ValueCallback<Uri[]> filePickerCallback;
     private byte[] pendingExport;
+    private TextToSpeech textToSpeech;
+    private boolean ttsReady;
+    private String queuedSpeech;
+    private String queuedLanguage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +41,38 @@ public class MainActivity extends Activity {
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
+        settings.setAllowFileAccessFromFileURLs(false);
+        settings.setAllowUniversalAccessFromFileURLs(false);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setMediaPlaybackRequiresUserGesture(false);
+
+        textToSpeech = new TextToSpeech(this, status -> {
+            ttsReady = status == TextToSpeech.SUCCESS;
+            if (ttsReady && queuedSpeech != null) {
+                speak(queuedSpeech, queuedLanguage);
+                queuedSpeech = null;
+                queuedLanguage = null;
+            }
+        });
 
         webView.addJavascriptInterface(new AndroidBridge(), "AndroidBridge");
         webView.setWebViewClient(new WebViewClient() {
             @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                // The JavaScript bridge is available only to this bundled local app.
+                return !request.getUrl().toString().startsWith("file:///android_asset/");
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                if (!url.startsWith("file:///android_asset/")) {
+                    return;
+                }
                 // The web version keeps its iPhone share-sheet export. In the APK, replace
-                // it with Android's file picker because WebView cannot save Blob URLs reliably.
-                view.evaluateJavascript("(function(){var old=window.deliver;window.deliver=async function(text,name){try{AndroidBridge.saveTextFile(btoa(unescape(encodeURIComponent(text))),name);return;}catch(e){return old(text,name);}};var note=document.getElementById('offline');if(note)note.textContent='Diese Android-App funktioniert vollständig offline. Sicherungen kannst du im Elternbereich als Datei speichern.';})();", null);
+                // it with Android's file picker. Android's system voice also replaces the
+                // browser speech API, which is not implemented consistently by WebView.
+                view.evaluateJavascript("(function(){var oldDeliver=window.deliver;window.deliver=async function(text,name){try{AndroidBridge.saveTextFile(btoa(unescape(encodeURIComponent(text))),name);return;}catch(e){return oldDeliver(text,name);}};var oldSpeak=window.speak;window.speak=function(text,lang){try{AndroidBridge.speakText(String(text||''),String(lang||'en-GB'));}catch(e){return oldSpeak(text,lang);}};var note=document.getElementById('offline');if(note)note.textContent='Diese Android-App funktioniert vollständig offline. Vorlesen und Sicherungen nutzen die Systemfunktionen deines Geräts.';})();", null);
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -112,7 +140,33 @@ public class MainActivity extends Activity {
         if (webView != null) {
             webView.destroy();
         }
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
         super.onDestroy();
+    }
+
+    private void speak(String text, String languageTag) {
+        if (text == null || text.isBlank() || text.length() > 2000) {
+            return;
+        }
+        if (!ttsReady) {
+            queuedSpeech = text;
+            queuedLanguage = languageTag;
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(languageTag == null ? "en-GB" : languageTag);
+        if (textToSpeech.isLanguageAvailable(locale) < TextToSpeech.LANG_AVAILABLE) {
+            locale = "de".equals(locale.getLanguage()) ? Locale.GERMAN : Locale.UK;
+        }
+        int result = textToSpeech.setLanguage(locale);
+        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+            Toast.makeText(this, "Diese Systemstimme ist auf dem Gerät nicht verfügbar.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        textToSpeech.setSpeechRate(0.85f);
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "noah-english-speech");
     }
 
     private final class AndroidBridge {
@@ -131,6 +185,11 @@ public class MainActivity extends Activity {
             } catch (IllegalArgumentException error) {
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, "Sicherung konnte nicht vorbereitet werden.", Toast.LENGTH_LONG).show());
             }
+        }
+
+        @JavascriptInterface
+        public void speakText(String text, String languageTag) {
+            runOnUiThread(() -> speak(text, languageTag));
         }
     }
 }
