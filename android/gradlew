@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+set -eu
+VERSION=8.11.1
+HOME_DIR="${GRADLE_USER_HOME:-$HOME/.gradle}/wrapper/dists/gradle-$VERSION-local"
+GRADLE_BIN="$HOME_DIR/gradle-$VERSION/bin/gradle"
+if [ ! -x "$GRADLE_BIN" ]; then
+  mkdir -p "$HOME_DIR"
+  ZIP="$HOME_DIR/gradle-$VERSION-bin.zip"
+  curl -L "https://services.gradle.org/distributions/gradle-$VERSION-bin.zip" -o "$ZIP"
+  unzip -q "$ZIP" -d "$HOME_DIR"
+  rm "$ZIP"
+fi
+exec "$GRADLE_BIN" "$@"

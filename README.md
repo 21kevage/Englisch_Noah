@@ -1,5 +1,11 @@
 # Englisch_Noah, Version 1.2
 
+## Android-App
+
+Unter `android/` liegt eine vollständig lokale Android-Hülle der Lern-App. Sie lädt ausschließlich die mitgelieferten Dateien und verlangt keine Internet-Berechtigung. Import und Sicherungsexport öffnen den Android-Dateidialog.
+
+Bei Änderungen an der App oder Android-Hülle erstellt GitHub Actions automatisch ein privates Debug-APK-Artefakt namens **Noahs-Englisch-APK**. Das APK ist nur für die private Installation gedacht. Vokabeldateien und Sicherungen bleiben außerhalb dieses öffentlichen Repositories.
+
 Web-App für Noahs Englischtraining. GitHub Pages übernimmt die statische Bereitstellung; keine eigene Serververwaltung, kein Konto und keine kostenpflichtigen APIs.
 
 ## Einmalig GitHub Pages einschalten

@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'de.kevage.noahsenglisch'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'de.kevage.noahsenglisch'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    def generatedWebAssets = layout.buildDirectory.dir('generated/web-assets')
+    sourceSets {
+        main.assets.srcDir(generatedWebAssets)
+    }
+
+    tasks.register('syncWebAssets', Copy) {
+        from(rootProject.projectDir.parentFile) {
+            include 'index.html', 'manifest.webmanifest', 'sw.js', 'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png'
+        }
+        into(generatedWebAssets)
+    }
+    tasks.named('preBuild').configure {
+        dependsOn(tasks.named('syncWebAssets'))
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

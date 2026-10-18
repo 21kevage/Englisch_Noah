@@ -1,0 +1,4 @@
+# Android/Gradle build caches and outputs
+android/.gradle/
+android/app/build/
+*.apk
