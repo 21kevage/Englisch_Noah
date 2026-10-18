@@ -1,4 +1,4 @@
-# Englisch_Noah – Prototyp 0.2
+# Englisch_Noah, Version 1.2
 
 Web-App für Noahs Englischtraining. GitHub Pages übernimmt die statische Bereitstellung; keine eigene Serververwaltung, kein Konto und keine kostenpflichtigen APIs.
 
@@ -21,10 +21,9 @@ Der verwendete GitHub-Zugang kann Dateien bearbeiten, bietet aber keine Pages-Ak
 1. Nach erfolgreicher Bereitstellung die Webadresse in Safari öffnen.
 2. Teilen → Zum Home-Bildschirm hinzufügen.
 3. Die App über dieses Symbol öffnen; abwarten, bis „App für Offline-Nutzung gespeichert“ erscheint.
-4. Im Elternbereich eine PIN festlegen.
-5. Die separat bereitgestellte Datei `Noah-Vokabeln-Unit1.json` unter **Vokabeldatei importieren** auswählen.
-6. Einträge prüfen und freigeben.
-7. Schließen, wieder öffnen und im Flugmodus erneut testen.
+4. Die separat bereitgestellte Datei `Noah-Vokabeln-Unit1.json` unter **Vokabeldatei importieren** auswählen.
+5. Einträge prüfen und freigeben.
+6. Schließen, wieder öffnen und im Flugmodus erneut testen.
 
 **Die lokale HTML-Datei funktioniert in der iPhone-Dateivorschau nicht als App.** Dieses Problem wurde beim Test beobachtet. Der HTTPS-/PWA-Weg ist auf Noahs iPhone noch zu testen.
 
@@ -39,20 +38,21 @@ Import ergänzt neue IDs, überspringt vorhandene IDs und verändert weder beste
 - Vorlesen per Systemstimme; keine Mikrofonerkennung oder Aussprachebenotung.
 - Getrennte Lernstände und Wiederholungen.
 - Elternfreigabe, Änderungen bleiben bis zur Prüfung getrennt von der gültigen Fassung.
-- Sicherungsexport und Wiederherstellung.
+- Sicherungsexport und Wiederherstellung. Auf dem iPhone öffnet der Export das Teilen-Menü („In Dateien sichern“), sonst einen normalen Download.
+- Unlesbare gespeicherte Daten werden beim Start unverändert beiseitegelegt statt überschrieben und lassen sich im Elternbereich herunterladen.
 
 ## Speicherung und Offline-Nutzung
 
 Lerndaten und Vokabeln bleiben im lokalen Browserspeicher (localStorage). Keine Übertragung an einen Datenbankserver. Sie werden nicht automatisch zwischen Android, Safari und installierter App übertragen.
-Sicherung regelmäßig exportieren. Löschen von Websitedaten oder ein Gerätewechsel kann Daten entfernen.
+Die App bittet den Browser, den Speicher dauerhaft zu behalten. Sicherung trotzdem regelmäßig exportieren. Löschen von Websitedaten oder ein Gerätewechsel kann Daten entfernen.
 Die App-Dateien werden per Service Worker zwischengespeichert; erster Besuch benötigt Internet. Offline funktioniert nur solange der Cache auf dem Gerät erhalten bleibt.
 Systemvorlesen kann von heruntergeladenen Stimmen und Gerät abhängen.
 Neue Programmversionen können nach Schließen aller App-Fenster und erneutem Online-Öffnen aktiv werden. Die Datenbank wird dabei nicht zurückgesetzt.
 
 ## Grenzen und Prüfungen
 
-Die PIN ist nur eine lokale Bedienungssperre und steht auch in Sicherungsdateien.
-Rückgabe mit Elternkommentar und PIN-Wiederherstellung sind noch offen.
+Der Elternbereich ist ohne PIN zugänglich.
+Rückgabe mit Elternkommentar ist noch offen.
 Textvergleich normalisiert Leerraum, Apostrophvarianten und abschließende . ! ?. Großschreibung, interne Satzzeichen und Kurzformen bleiben strikt.
 „Sicher“ benötigt vorläufig drei erfolgreiche Tage; unmittelbare Wiederholung nach Lösung zählt nicht als zusätzlicher erfolgreicher Tag.
 
@@ -65,3 +65,7 @@ Kein vollständiger Browser-/iPhone-Test durchgeführt; der Browserdownload in d
 Noch am Gerät prüfen: Installation, Import, Freigabe, Speichern nach Neustart, Export/Import, Flugmodus, Vorlesen.
 
 [Konzept und Entscheidungsverlauf](docs/KONZEPT.md)
+
+## Tests
+
+`node tests/core.cjs` prüft die Lernlogik ohne Browser. `python tests/e2e.py` spielt alle Abläufe im iPhone-Format durch (Import, Freigabe, alle Übungsarten, Zurück, Sicherung, Offline, Layout auf 320 bis 768 Pixel). Dafür wird Playwright mit Chromium benötigt.
