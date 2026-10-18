@@ -6,6 +6,8 @@ run("db.entries=vocabularyPack({type:'noah-vocabulary',version:1,entries:[{id:'b
 assert.equal(run("norm('The romans built')===norm('The Romans built')"),false);
 assert.equal(run("norm('It take a lot')===norm('It takes a lot')"),false);
 assert.equal(run('norm("Hadrian’s Wall.")===norm("Hadrian\'s Wall")'),true);
+assert.equal(run("norm('both ... and ...')===norm('both … and …')"),true);
+assert.equal(run("norm('both .. and ...')===norm('both ... and ...')"),false);
 assert.match(run("difference('The romans had a empire in 122.','The Romans had an empire in 122.')"),/romans → Romans/);
 assert.match(run("difference('The romans had a empire in 122.','The Romans had an empire in 122.')"),/a → an/);
 run("db.entries[0].approved=db.entries[0].pending;db.entries[0].pending=null;session={mode:'sentence',queue:['book-1'],index:0,done:false,results:[],retried:new Set()};record(false,'Textvergleich')");assert.equal(run('session.queue.length'),2);assert.equal(run('db.entries[0].progress.sentence.lastOK'),false);

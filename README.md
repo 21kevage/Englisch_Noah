@@ -1,4 +1,4 @@
-# Englisch_Noah, Version 1.2
+# Englisch_Noah, Version 1.3
 
 ## Android-App
 
